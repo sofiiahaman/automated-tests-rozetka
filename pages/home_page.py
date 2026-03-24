@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
+from selenium.webdriver.common.keys import Keys
 
 class HomePage(BasePage):
 
@@ -7,5 +8,7 @@ class HomePage(BasePage):
     SEARCH_BUTTON = (By.CSS_SELECTOR, "[data-testid='search-suggest-submit']")
 
     def search(self, text):
-        self.type(self.SEARCH_INPUT, text)
-        self.click(self.SEARCH_BUTTON)
+        search_field = self.find_element(self.SEARCH_INPUT)
+        search_field.clear()
+        search_field.send_keys(text)
+        search_field.send_keys(Keys.ENTER) 

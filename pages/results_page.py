@@ -1,15 +1,9 @@
-from pages.home_page import HomePage
-from pages.results_page import ResultsPage
+from selenium.webdriver.common.by import By
+from pages.base_page import BasePage
 
-def test_search_product(driver):
-    home = HomePage(driver)
-    results = ResultsPage(driver)
+class ResultsPage(BasePage):
+    PRODUCT_TITLES = (By.XPATH, "//*[contains(@class, 'title')]")
 
-    search_query = "ноутбук"
-
-    home.search(search_query)
-
-    assert "search" in driver.current_url
-
-    first_title = results.get_first_product_title()
-    assert search_query in first_title.lower()
+    def get_first_product_title(self):
+        element = self.find_element(self.PRODUCT_TITLES)
+        return element.text.lower()

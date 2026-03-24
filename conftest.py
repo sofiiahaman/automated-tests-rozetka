@@ -1,13 +1,20 @@
 import pytest
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
+import undetected_chromedriver as uc
+import time
 
 @pytest.fixture
 def driver():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    options = uc.ChromeOptions()
+
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-popup-blocking")
+
+    driver = uc.Chrome(options=options)
     driver.maximize_window()
-    driver.get("https://rozetka.com.ua/")
+
+    driver.get("https://rozetka.com.ua/ua/")
+
+    time.sleep(5)
 
     yield driver
 
