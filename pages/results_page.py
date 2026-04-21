@@ -45,3 +45,4 @@ class ResultsPage(BasePage):
                 time.sleep(1) 
         
         raise Exception("Не вдалося натиснути на кнопку кошика після 3 спроб")
+    

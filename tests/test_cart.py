@@ -29,6 +29,7 @@ def test_add_to_cart_from_results(driver):
 
     assert "Кошик" in cart_title or "Корзина" in cart_title
 
+
 def test_change_product_quantity_in_cart(driver, home_page, results_page, product_page):
     driver.get("https://rozetka.com.ua/ua/")
 
