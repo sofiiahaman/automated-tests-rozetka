@@ -4,18 +4,21 @@ import time
 
 @pytest.fixture
 def driver():
+    driver = None 
     options = uc.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-popup-blocking")
-
-    driver = uc.Chrome(options=options)
-    driver.maximize_window()
-
-    driver.get("https://rozetka.com.ua/ua/")
-
-    time.sleep(5)
-
-    yield driver
-
-    driver.quit()
+    try:
+        
+        driver = uc.Chrome(options=options)
+        driver.maximize_window()
+        driver.get("https://rozetka.com.ua/ua/")
+        time.sleep(5)
+        yield driver
+    except Exception as e:
+        print(f"\nПомилка при запуску браузера: {e}")
+        raise e 
+    finally:
+        if driver is not None:
+            driver.quit()
