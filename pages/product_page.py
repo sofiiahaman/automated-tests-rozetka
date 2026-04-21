@@ -11,6 +11,9 @@ class ProductPage(BasePage):
     PLUS_BUTTON = (By.CSS_SELECTOR, "button[data-testid='cart-counter-increment-button']")
     QUANTITY_INPUT = (By.CSS_SELECTOR, "input[data-testid='cart-counter-input']")
     TOTAL_PRICE = (By.CSS_SELECTOR, "div[data-testid='cart-receipt-sum'] .cart-receipt__sum-price")
+    CONTEXT_MENU = (By.CSS_SELECTOR, "button[id^='cartProductActions']")
+    DELETE_BUTTON = (By.CSS_SELECTOR, "button.button--medium.button--with-icon.button--link")
+    EMPTY_CART_TITLE = (By.CSS_SELECTOR, "h4.cart-dummy__heading")
 
     def click_buy(self):
         self.click(self.BUY_BUTTON)
@@ -39,3 +42,19 @@ class ProductPage(BasePage):
         quantity_input.send_keys(Keys.ENTER)
 
         time.sleep(1)
+
+    def remove_product_from_cart(self):
+        menu_btn = self.wait.until(EC.element_to_be_clickable(self.CONTEXT_MENU))
+        menu_btn.click()
+
+        time.sleep(0.5)
+
+        delete_btn = self.wait.until(EC.element_to_be_clickable(self.DELETE_BUTTON))
+        delete_btn.click()
+
+    def is_cart_empty(self):
+        try:
+            title = self.wait.until(EC.visibility_of_element_located(self.EMPTY_CART_TITLE))
+            return "Кошик порожній" in title.text
+        except:
+            return False

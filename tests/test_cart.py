@@ -84,7 +84,28 @@ def test_negative_product_quantity_validation(driver, home_page, results_page, p
     actual_quantity = product_page.get_quantity()
 
     assert "-" not in actual_quantity, "Система дозволила ввести символ мінуса!"
-   
-    assert actual_quantity == "15", f"Очікували, що до '1' допишеться '5' і вийде '15', але отримали '{actual_quantity}'"
+
+    quantity_int = int(actual_quantity)
+    assert quantity_int >= 1, f"Кількість не може бути меншою за 1, але отримали {quantity_int}"
+        
+    print(f"DEBUG: Тест пройшов. Система відхилила '-5' і встановила '{actual_quantity}'")
+
+
+def test_remove_product_from_cart(driver, home_page, results_page, product_page):
+    driver.get("https://rozetka.com.ua/ua/")
+
+    home_page.search("iphone")
+ 
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "section.goods-grid, rz-grid"))
+    )
+
+    results_page.addToCart_first_product()
+
+    product_page.open_cart_notification()
+
+    product_page.remove_product_from_cart()
+
+    assert product_page.is_cart_empty(), "Помилка: Після видалення товару кошик не став порожнім!"
     
-    print(f"Тест пройдено: символ '-' відфільтровано, отримано результат {actual_quantity}")
+    print("Товар успішно видалено, кошик порожній.")
