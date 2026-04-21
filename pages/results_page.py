@@ -1,3 +1,4 @@
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
@@ -33,12 +34,14 @@ class ResultsPage(BasePage):
         time.sleep(3)
 
     def addToCart_first_product(self):
-        try:
-            self.wait.until(EC.visibility_of_any_elements_located(self.CART_BUTTON_ON_TILE))
+        self.wait.until(EC.presence_of_element_located(self.CART_BUTTON_ON_TILE))
 
-            cart_buttons = self.driver.find_elements(*self.CART_BUTTON_ON_TILE)
-
-            self.driver.execute_script("arguments[0].click();", cart_buttons[0])
-            
-        except Exception as e:
-            raise Exception(f"Помилка при додаванні в кошик: {str(e)}")
+        for _ in range(3):
+            try:
+                button = self.driver.find_element(*self.CART_BUTTON_ON_TILE)
+                self.driver.execute_script("arguments[0].click();", button)
+                return 
+            except Exception:
+                time.sleep(1) 
+        
+        raise Exception("Не вдалося натиснути на кнопку кошика після 3 спроб")
