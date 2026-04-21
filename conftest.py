@@ -17,7 +17,9 @@ def driver():
     if os.environ.get('CI'): 
         options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080")
+        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         options.add_argument("--disable-gpu")
+        options.add_argument("--blink-settings=imagesEnabled=false")
 
     try:
         driver = uc.Chrome(options=options)
@@ -27,6 +29,7 @@ def driver():
             
         driver.get("https://rozetka.com.ua/ua/")
         time.sleep(5)
+        print(f"\nDEBUG: Поточний заголовок сторінки: {driver.title}")
         yield driver
     except Exception as e:
         print(f"\nПомилка при запуску браузера: {e}")
